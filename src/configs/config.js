@@ -37,26 +37,11 @@ const config = Object.freeze({
   NODEMAILER_PORT: process.env.NODEMAILER_PORT,
   NODEMAILER_USER: process.env.NODEMAILER_USER,
 
-  // fonts configs
-  // -------------
-  FONTS_PATH: process.env.FONTS_PATH,
-
   // sendgrid configs
   // --------------
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
   SENDGRID_MAIL_FROM: process.env.SENDGRID_MAIL_FROM,
 
-  // logo configs
-  // ------------
-  LOGO_URL_WITH_BACKGROUND: process.env.LOGO_URL_WITH_BACKGROUND,
-  LOGO_URL_WITHOUT_BACKGROUND: process.env.LOGO_URL_WITHOUT_BACKGROUND,
-  CHARITY_LOGO: process.env.CHARITY_LOGO,
-
-  // stripe configs
-  // --------------
-  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
-  STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
-  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
 });
 
 const getEnv = (key) => {
