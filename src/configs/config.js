@@ -8,10 +8,6 @@ const config = Object.freeze({
   NODE_ENV: process.env.NODE_ENV,
   MONGODB_URL: process.env.MONGODB_URL,
   MONGODB_NAME: process.env.MONGODB_NAME,
-  RESET_PASSWORD_URL: process.env.RESET_PASSWORD_URL,
-  LOGIN_URL: process.env.LOGIN_URL,
-
-  FRONTEND_URL: process.env.FRONTEND_URL,
 
   // jwt token credentials
   // ---------------------
