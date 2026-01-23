@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import AuthRoutes from "./routes/auth.routes.js";
+import ProductRoutes from "./routes/product.routes.js";
 import cors from "cors";
 import morgan from "morgan";
 import http from "http";
@@ -29,6 +30,7 @@ app.get("/", (req, res) =>
 );
 
 app.use("/api/auth", AuthRoutes);
+app.use("/api/product", ProductRoutes);
 
 // error handler
 app.use(errorHandler);
