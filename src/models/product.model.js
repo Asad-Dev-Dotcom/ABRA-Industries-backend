@@ -107,8 +107,9 @@ productSchema.path("category.sub").validate(function (value) {
 }, "Invalid sub-category for selected main category");
 
 
-productSchema.pre("save", function (next) {
-    this.searchText = this.name + " " + this.description + " " + this.category;
+productSchema.pre("validate", function (next) {
+    const categoryString = `${this.category?.main || ''} ${this.category?.sub || ''}`;
+    this.searchText = `${this.name} ${this.description} ${categoryString}`;
     next();
 });
 
