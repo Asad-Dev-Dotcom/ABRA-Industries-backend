@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PRODUCT_SIZES, PRODUCT_MAIN_CATEGORIES, PRODUCT_SUB_CATEGORIES } from "../constants/product.constants.js"
 
 // Product Schema
 const productSchema = new mongoose.Schema(
@@ -26,10 +27,6 @@ const productSchema = new mongoose.Schema(
             type: Number,
             min: 0,
         },
-        isColorAvailable: {
-            type: Boolean,
-            default: false,
-        },
         colors: [
             {
                 name: {
@@ -42,26 +39,36 @@ const productSchema = new mongoose.Schema(
                 },
             }
         ],
-        isSizeAvailable: {
-            type: Boolean,
-            default: false,
-        },
         sizes: [
             {
                 name: {
                     type: String,
-                    required: true,
+                    enum: PRODUCT_SIZES.map(s => s.name),
+                    required: true
                 },
                 value: {
                     type: String,
-                    required: true,
-                },
+                    enum: PRODUCT_SIZES.map(s => s.value),
+                    required: true
+                }
             }
         ],
         category: {
-            type: String,
-            required: true,
-            trim: true,
+            main: {
+                type: String,
+                enum: PRODUCT_MAIN_CATEGORIES,
+                required: true
+            },
+            sub: {
+                type: String,
+                // The original code had `enum: PRODUCT_SUB_CATEGORIES`.
+                // The comments in the provided snippet indicate that `PRODUCT_SUB_CATEGORIES` is likely an object
+                // (e.g., { TOPS: [...], BOTTOMS: [...] }) rather than a flat array of all sub-categories.
+                // Mongoose `enum` expects an array of strings.
+                // To make the `enum` work for all possible sub-categories, we flatten the object values.
+                enum: Object.values(PRODUCT_SUB_CATEGORIES).flat(),
+                required: true
+            }
         },
         stock: {
             type: Number,
@@ -87,11 +94,25 @@ const productSchema = new mongoose.Schema(
             ref: "Auth",
             required: true,
         },
+        searchText: {
+            type: String,
+            required: true,
+        },
     },
     { timestamps: true }
 );
 
+productSchema.path("category.sub").validate(function (value) {
+    return PRODUCT_SUB_CATEGORIES[this.category.main]?.includes(value);
+}, "Invalid sub-category for selected main category");
+
+
+productSchema.pre("save", function (next) {
+    this.searchText = this.name + " " + this.description + " " + this.category;
+    next();
+});
+
 // Index for better query performance
-productSchema.index({ owner: 1, category: 1 });
+productSchema.index({ owner: 1, category: 1, searchText: 1 });
 
 export const Product = mongoose.model("Product", productSchema);
